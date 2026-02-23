@@ -73,7 +73,25 @@ def login():
         return {"msg": "Bad credentials"}, 401
     token = create_access_token(identity=user.username)
     return {"access_token": token}
+@app.route("/change-password", methods=["POST"])
+@jwt_required()
+def change_password():
+    data = request.json
+    current_password = data.get("current_password")
+    new_password = data.get("new_password")
 
+    user = User.query.filter_by(username=get_jwt_identity()).first()
+
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
+
+    if user.password != current_password:
+        return jsonify({"msg": "Current password incorrect"}), 400
+
+    user.password = new_password
+    db.session.commit()
+
+    return jsonify({"msg": "Password updated successfully"})
 @app.route("/add_stock", methods=["POST"])
 @jwt_required()
 def add_stock():
@@ -128,6 +146,7 @@ if __name__ == "__main__":
         db.create_all()
 
     app.run(debug=True)
+
 
 
 
