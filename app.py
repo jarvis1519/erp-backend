@@ -20,6 +20,13 @@ app.config['JWT_SECRET_KEY'] = 'super-secret-key'
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
+
+# ---------------- MODELS ----------------
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(200))
 @app.route("/create-admin")
 def create_admin():
     from werkzeug.security import generate_password_hash
@@ -29,13 +36,6 @@ def create_admin():
         db.session.commit()
         return "Admin Created"
     return "Admin Already Exists"
-# ---------------- MODELS ----------------
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(200))
-
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
@@ -127,4 +127,5 @@ if __name__ == "__main__":
         db.create_all()
 
     app.run(debug=True)
+
 
