@@ -12,7 +12,9 @@ import os
 
 app = Flask(__name__)
 CORS(app)
-
+@app.route("/")
+def home():
+    return {"status": "ERP Backend Running"}
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///erp.db'
 app.config['JWT_SECRET_KEY'] = 'super-secret-key'
 
@@ -115,4 +117,5 @@ def generate_invoice(invoice):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+
     app.run(debug=True)
