@@ -40,7 +40,8 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
     phone = db.Column(db.String(20))
-
+with app.app_context():
+    db.create_all()
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
@@ -127,6 +128,7 @@ if __name__ == "__main__":
         db.create_all()
 
     app.run(debug=True)
+
 
 
 
